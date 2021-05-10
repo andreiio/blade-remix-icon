@@ -1,0 +1,50 @@
+{
+    "name": "andreiio/blade-remix-icon",
+    "type": "library",
+    "description": "A package to easily make use of Remix Icon in your Laravel Blade views.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martín M.",
+            "email": "skydiver@users.noreply.github.com"
+        },
+        {
+            "name": "Andrei Ioniță",
+            "homepage": "https://andrei.io"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "blade-ui-kit/blade-icons": "^1.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AndreiIonita\\BladeRemixIcon\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AndreiIonita\\BladeRemixIcon\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AndreiIonita\\BladeRemixIcon\\BladeRemixIconServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
