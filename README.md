@@ -21,8 +21,8 @@ For a full list of available icons see [the `resources/svg` directory](./resourc
 
 ## Install
 
-```sh
-$ composer require andreiio/blade-remix-icon
+```console
+composer require andreiio/blade-remix-icon
 ```
 
 ## Usage
@@ -46,7 +46,7 @@ And even use inline styles:
 
 If you want to use the raw SVG icons as assets, you can publish them using:
 
-```bash
+```console
 php artisan vendor:publish --tag=blade-remix-icon --force
 ```
 
@@ -62,8 +62,8 @@ Blade Remix icon uses Blade Icons under the hood. Please refer to [the Blade Ico
 
 ## Testing
 
-```bash
-$ composer test
+```console
+composer test
 ```
 
 ## Credits
