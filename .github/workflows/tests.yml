@@ -13,29 +13,26 @@ jobs:
           - macos-latest
           - windows-latest
         php:
-          - '7.4'
-          - '8.0'
-        dependency-version:
-          - prefer-lowest
-          - prefer-stable
+          - "7.4"
+          - "8.0"
+          - "8.1"
 
-    name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        extensions: fileinfo
-        coverage: pcov
-        tools: composer:v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, fileinfo, libxml, mbstring, zip
+          coverage: pcov
 
-    - name: Install PHP dependencies
-      run: composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --ansi
+      - name: Install PHP dependencies
+        run: composer update --no-interaction --no-progress --ansi
 
-    - name: Unit Tests
-      run: vendor/bin/phpunit
+      - name: Unit Tests
+        run: composer test
