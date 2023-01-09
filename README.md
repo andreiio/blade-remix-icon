@@ -78,7 +78,7 @@ This project is licensed under the MIT License (MIT) – see the [LICENSE](LICEN
 
 [ico-version]: https://img.shields.io/packagist/v/andreiio/blade-remix-icon.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-github-actions]: https://img.shields.io/github/workflow/status/andreiio/blade-remix-icon/Tests.svg?style=flat-square
+[ico-github-actions]: https://img.shields.io/github/actions/workflow/status/andreiio/blade-remix-icon/tests.yml?style=flat-square&branch=main
 [ico-styleci]: https://styleci.io/repos/365816298/shield
 [ico-downloads]: https://img.shields.io/packagist/dt/andreiio/blade-remix-icon.svg?style=flat-square
 
