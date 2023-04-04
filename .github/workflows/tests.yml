@@ -7,6 +7,7 @@ on:
 jobs:
   tests:
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
@@ -16,19 +17,39 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+
+    env:
+      extensions: dom, curl, fileinfo, libxml, mbstring, zip
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          key: php-extensions-cache
+
+      - name: Cache extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, fileinfo, libxml, mbstring, zip
+          extensions: ${{ env.extensions }}
           coverage: pcov
 
       - name: Install PHP dependencies
