@@ -4,4 +4,3 @@
 /.php_cs.cache
 /composer.lock
 /package-lock.json
-.php-cs-fixer.cache
