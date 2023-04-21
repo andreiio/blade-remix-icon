@@ -1,0 +1,72 @@
+name: Update
+
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+env:
+  repository: Remix-Design/RemixIcon
+
+jobs:
+  update:
+    name: Update icons
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - id: current-version
+        name: Get current version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./.version
+          trim: true
+
+      - id: latest-version
+        name: Get latest version
+        uses: pozetroninc/github-action-get-latest-release@v0.7.0
+        with:
+          repository: ${{ env.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: new-version
+        name: Compare versions
+        run: |
+          echo "Current version: ${{ steps.current-version.outputs.content }}"
+          echo "Latest version: ${{ steps.latest-version.outputs.release }}"
+
+          if [ "${{ steps.current-version.outputs.content }}" != "${{ steps.latest-version.outputs.release }}" ]; then
+              echo ::set-output name=exists::true
+          fi
+
+      - name: Download icons
+        if: steps.new-version.outputs.exists
+        run: |
+          rm -rf resources/svg/*
+          curl -sSL https://github.com/${{ env.repository }}/releases/download/${{ steps.latest-version.outputs.release }}/RemixIcon_Svg_${{ steps.latest-version.outputs.release }}.zip -o icons.zip
+          unzip -jo icons.zip -d resources/svg
+          find . -type f -name '*.DS_Store' -delete
+          rm icons.zip
+
+      - name: Process icons
+        if: steps.new-version.outputs.exists
+        run: |
+          grep -Lir "fill=" resources/svg | xargs sed -i  "s/<svg/<svg fill=\"currentColor\"/"
+
+      - name: Update .version
+        if: steps.new-version.outputs.exists
+        run: echo ${{ steps.latest-version.outputs.release }} > ./.version
+
+      - name: Create pull request
+        if: steps.new-version.outputs.exists
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "chore: update to ${{ env.repository }} ${{ steps.latest-version.outputs.release }}"
+          title: "chore: update to ${{ env.repository }} ${{ steps.latest-version.outputs.release }}"
+          branch: chore/update-${{ steps.latest-version.outputs.release }}
+          body: |
+            This PR updates ${{ env.repository }} from [${{ steps.current-version.outputs.content }}](https://github.com/${{ env.repository }}/releases/tag/${{ steps.current-version.outputs.content }}) to [${{ steps.latest-version.outputs.release }}](https://github.com/${{ env.repository }}/releases/tag/${{ steps.latest-version.outputs.release }}).
+
+            Check out the differences: [`${{ steps.current-version.outputs.content }}` ... `${{ steps.latest-version.outputs.release }}`](https://github.com/${{ env.repository }}/compare/${{ steps.current-version.outputs.content }}...${{ steps.latest-version.outputs.release }})
