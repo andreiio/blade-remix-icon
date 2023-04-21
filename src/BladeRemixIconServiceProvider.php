@@ -13,7 +13,7 @@ class BladeRemixIconServiceProvider extends ServiceProvider
     {
         $this->callAfterResolving(Factory::class, function (Factory $factory) {
             $factory->add('remix', [
-                'path'   => __DIR__.'/../resources/svg',
+                'path' => __DIR__.'/../resources/svg',
                 'prefix' => 'ri',
             ]);
         });
