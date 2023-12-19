@@ -50,11 +50,6 @@ jobs:
           find . -type f -name '*.DS_Store' -delete
           rm icons.zip
 
-      - name: Process icons
-        if: steps.new-version.outputs.exists
-        run: |
-          grep -Lir "fill=" resources/svg | xargs sed -i  "s/<svg/<svg fill=\"currentColor\"/"
-
       - name: Update .version
         if: steps.new-version.outputs.exists
         run: echo ${{ steps.latest-version.outputs.release }} > ./.version
